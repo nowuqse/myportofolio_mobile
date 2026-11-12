@@ -16,6 +16,30 @@ This project is a personal mobile portfolio application built with Flutter. It c
 - Flutter
 - Dart
 
+### Setup Instructions
+
+Prerequisites:
+
+- Flutter SDK must be installed on your device.
+- Make sure Flutter is properly configured by running flutter doctor in your terminal.
+- Make sure you have a suitable IDE (such as VS Code or Android Studio) and an emulator or physical device to run the application.
+
+1. Clone Repository 
+```bash
+git clone https://github.com/nowuqse/myportofolio_mobile.git
+cd myportofolio_mobile
+```
+
+2. Install Dependencies
+```bash
+flutter pub get
+```
+
+3. Run the Application
+```bash
+flutter run
+```
+
 ## Progress Logs
 
 | Week | Progress |
@@ -117,9 +141,14 @@ Jika hal-hal di atas terjadi, kita harus melakukan `hot restart` (tekan `R` di t
 
 For this task (week 7), I used ChatGPT and DeepSeek to learn the basics of Flutter, from downloading the SDK to choosing a platform to run my code. Rather than directly copying the generated code, I used AI to help me understand and fix problems, such as issues regarding Gradle configuration in Android Studio, as well as refactoring the code into separate files (menu.dart and main.dart).
 
-I also used ChatGPT to understand the purpose and functionality of the widgets used in my project, including how they interact with each other through the widget tree. Additionally, I asked for explanations of concepts such as MaterialApp, StatelessWidget, StatefulWidget, and BuildContext to better understand how Flutter works beyond just writing the code.
+I also used ChatGPT to understand the purpose and functionality of the widgets used in my project, including how they interact with each other through the widget tree. Additionally, I asked for explanations of concepts such as MaterialApp, StatelessWidget, StatefulWidget, and BuildContext to better understand how Flutter works beyond just writing the code. AI was also used to help me structure and refine the explanations in my README, particularly when describing the widget tree, the widgets used, and the differences between hot reload and hot restart. I made sure to review the explanations and relate them to my actual implementation so that I could understand what each part of the code does.
 
-AI was also used to help me structure and refine the explanations in my README, particularly when describing the widget tree, the widgets used, and the differences between hot reload and hot restart. I made sure to review the explanations and relate them to my actual implementation so that I could understand what each part of the code does.
+One key limitation is that I still had to limit the context and provide full, precise context to the AI so that its answers wouldn't be overkill or irrelevant. If I gave too little context, the AI would produce generic solutions that didn't fit my project structure. Conversely, if I gave too much unrelated context, the AI's response became bloated and unfocused. I had to carefully scope my prompts
 
-Overall, I used AI as a learning assistant and debugging tool throughout the task, rather than relying on it to complete the assignment entirely.
+I applied a specific and contextual prompting strategy instead of asking AI to generate the whole code. Examples of prompts I used:
+
+- Guide me through finding my Flutter SDK location on Windows and explain how to configure it in VS Code
+- Explain the purpose of each widget used in my main.dart and menu.dart files, including how they are structured in the widget tree
+- Please review my README explanations and improve the formatting while keeping my original wording and writing style
+- Explain the differences between StatelessWidget and StatefulWidget, and why we use StatelessWidget best here
 
