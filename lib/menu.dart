@@ -72,7 +72,20 @@ class MyHomePage extends StatelessWidget {
                     // shrinkWrap agar ukuran kisi menyesuaikan tinggi konten anak.
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
-                      return ItemCard(item);
+                      // Cek apakah item yang diklik bernama "Logout"
+                      return ItemCard(item, () {
+                        if (item.name == "Logout") {
+                          // Jika Logout, panggil fungsi dialog 
+                          _showLogoutDialog(context);
+                        } else {
+                          // Jika tombol lain, tampilkan SnackBar seperti biasa
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
+                            );
+                        }
+                      });
                     }).toList(),
                   ),
                 ],
@@ -81,6 +94,39 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Logout'),
+          content: const Text('Apakah kamu yakin ingin keluar dari aplikasi?'),
+          actions: [
+            // Tombol Batal
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Menutup dialog
+              },
+              child: const Text('Batal'),
+            ),
+            // Tombol Logout
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Menutup dialog 
+                // Lalu tampilkan SnackBar sebagai tanda berhasil logout
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Kamu telah menekan tombol Logout!")),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+              child: const Text('Logout', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -127,8 +173,9 @@ class ItemHomepage {
 
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
+  final VoidCallback onPressed;
 
-  const ItemCard(this.item, {super.key});
+  const ItemCard(this.item, this.onPressed, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -138,14 +185,8 @@ class ItemCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         // Aksi ketika kartu ditekan oleh pengguna.
-        onTap: () {
-          // Menampilkan SnackBar dengan pesan interaktif.
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
-        },
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(8),
           child: Center(
