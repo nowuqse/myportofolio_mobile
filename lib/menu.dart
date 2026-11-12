@@ -28,6 +28,7 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      
       // Body halaman utama dengan padding di sekelilingnya.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
