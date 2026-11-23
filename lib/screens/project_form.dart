@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
@@ -27,6 +26,83 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
     'Other',
   ];
 
+  // Mengosongkan seluruh input form
+  void _clearForm() {
+    _formKey.currentState!.reset();
+
+    setState(() {
+      _projectName = "";
+      _description = "";
+      _category = "Web Development";
+      _technologies = "";
+      _projectLink = "";
+    });
+  }
+
+  // Menampilkan dialog konfirmasi sebelum menghapus form
+  void _showClearConfirmation() {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Clear Form?'),
+          content: const Text('Are you sure you want to clear all inputs?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                _clearForm();
+              },
+              child: const Text('Clear'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Menampilkan ringkasan input setelah validasi berhasil
+  void _saveProject() {
+    if (_formKey.currentState!.validate()) {
+      showDialog(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: const Text('Project added successfully!'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Project Name: $_projectName'),
+                  Text('Description: $_description'),
+                  Text('Category: $_category'),
+                  Text('Technologies: $_technologies'),
+                  Text('Project Link: $_projectLink'),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext);
+                  _clearForm();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,11 +112,16 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
         foregroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),
+
       body: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+
         child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8.0),
+
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 1. PROJECT NAME
               Padding(
@@ -104,21 +185,19 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField<String>(
+                  initialValue: _category,
                   decoration: InputDecoration(
                     labelText: "Project Category",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
                   ),
-                  initialValue: _category,
-                  items: _categories
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(category),
-                        ),
-                      )
-                      .toList(),
+                  items: _categories.map((category) {
+                    return DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
                   onChanged: (newValue) {
                     if (newValue == null) return;
 
@@ -127,8 +206,7 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                     });
                   },
                   validator: (value) {
-                    if (value == null ||
-                        !_categories.contains(value)) {
+                    if (value == null || !_categories.contains(value)) {
                       return "Please select a valid project category!";
                     }
 
@@ -182,8 +260,7 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                     final uri = Uri.tryParse(value.trim());
 
                     if (uri == null ||
-                        (uri.scheme != 'http' &&
-                            uri.scheme != 'https') ||
+                        (uri.scheme != 'http' && uri.scheme != 'https') ||
                         uri.host.isEmpty ||
                         !uri.host.contains('.')) {
                       return "Please enter a valid URL (https://example.com)";
@@ -194,66 +271,39 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                 ),
               ),
 
-              // SAVE BUTTON
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(Colors.indigo),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Project added successfully!',
-                              ),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Project Name: $_projectName'),
-                                    Text('Description: $_description'),
-                                    Text('Category: $_category'),
-                                    Text('Technologies: $_technologies'),
-                                    Text('Project Link: $_projectLink'),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _formKey.currentState!.reset();
+              const SizedBox(height: 16),
 
-                                    // Sinkronisasi variabel state
-                                    setState(() {
-                                      _projectName = "";
-                                      _description = "";
-                                      _category = "Web Development";
-                                      _technologies = "";
-                                      _projectLink = "";
-                                    });
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(color: Colors.white),
+              // 6. CLEAR & SAVE BUTTON
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    // CLEAR BUTTON
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _showClearConfirmation,
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: const Text('Clear'),
+                      ),
                     ),
-                  ),
+
+                    const SizedBox(width: 12),
+
+                    // SAVE BUTTON
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: _saveProject,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                        ),
+                        child: const Text('Save'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

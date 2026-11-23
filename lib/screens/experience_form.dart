@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
@@ -6,8 +5,7 @@ class ExperienceFormPage extends StatefulWidget {
   const ExperienceFormPage({super.key});
 
   @override
-  State<ExperienceFormPage> createState() =>
-      _ExperienceFormPageState();
+  State<ExperienceFormPage> createState() => _ExperienceFormPageState();
 }
 
 class _ExperienceFormPageState extends State<ExperienceFormPage> {
@@ -30,6 +28,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
     'Freelance',
   ];
 
+  // Format tanggal menjadi YYYY-MM-DD
   String _formatDate(DateTime? date) {
     if (date == null) return 'Not selected';
 
@@ -55,8 +54,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
         _startDate = selectedDate;
 
         // End Date tidak boleh sebelum Start Date
-        if (_endDate != null &&
-            _endDate!.isBefore(selectedDate)) {
+        if (_endDate != null && _endDate!.isBefore(selectedDate)) {
           _endDate = null;
         }
       });
@@ -83,6 +81,19 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
     }
   }
 
+  // Mengosongkan seluruh input form
+  void _clearForm() {
+    _formKey.currentState!.reset();
+
+    setState(() {
+      _title = "";
+      _description = "";
+      _category = "Internship";
+      _startDate = null;
+      _endDate = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,12 +106,14 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
 
       body: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-
               // 1. EXPERIENCE TITLE
               TextFormField(
                 maxLength: 255,
@@ -174,8 +187,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                   }
                 },
                 validator: (value) {
-                  if (value == null ||
-                      !_categories.contains(value)) {
+                  if (value == null || !_categories.contains(value)) {
                     return 'Please select a valid category!';
                   }
 
@@ -209,9 +221,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                             field.didChange(_startDate);
                           },
                           icon: const Icon(Icons.calendar_today),
-                          label: Text(
-                            'Start Date: ${_formatDate(_startDate)}',
-                          ),
+                          label: Text('Start Date: ${_formatDate(_startDate)}'),
                         ),
                       ),
 
@@ -220,9 +230,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
                             field.errorText!,
-                            style: const TextStyle(
-                              color: Colors.red,
-                            ),
+                            style: const TextStyle(color: Colors.red),
                           ),
                         ),
                     ],
@@ -269,9 +277,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
                             field.errorText!,
-                            style: const TextStyle(
-                              color: Colors.red,
-                            ),
+                            style: const TextStyle(color: Colors.red),
                           ),
                         ),
                     ],
@@ -281,60 +287,98 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
 
               const SizedBox(height: 16),
 
-              // SAVE BUTTON
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 14,
-                  ),
-                ),
-                onPressed: () {
-                  // Validasi semua FormField
-                  if (_formKey.currentState!.validate()) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text(
-                            'Experience added successfully!',
-                          ),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                              children: [
-                                Text('Title: $_title'),
-                                Text('Description: $_description'),
-                                Text('Category: $_category'),
-                                Text(
-                                  'Start Date: ${_formatDate(_startDate)}',
+              // 6. CLEAR & SAVE BUTTON
+              Row(
+                children: [
+                  // CLEAR BUTTON
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) {
+                            return AlertDialog(
+                              title: const Text('Clear Form?'),
+                              content: const Text(
+                                'Are you sure you want to clear all inputs?',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                  },
+                                  child: const Text('Cancel'),
                                 ),
-                                Text(
-                                  'End Date: ${_endDate == null ? "Ongoing" : _formatDate(_endDate)}',
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(dialogContext);
+                                    _clearForm();
+                                  },
+                                  child: const Text('Clear'),
                                 ),
                               ],
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
+                            );
+                          },
                         );
                       },
-                    );
-                  }
-                },
-                child: const Text(
-                  'Save Experience',
-                  style: TextStyle(color: Colors.white),
-                ),
+                      child: const Text('Clear'),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  // SAVE BUTTON
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Experience added successfully!',
+                                ),
+                                content: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Title: $_title'),
+                                      Text('Description: $_description'),
+                                      Text('Category: $_category'),
+                                      Text(
+                                        'Start Date: ${_formatDate(_startDate)}',
+                                      ),
+                                      Text(
+                                        'End Date: ${_endDate == null ? "Ongoing" : _formatDate(_endDate)}',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(dialogContext);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
+                      child: const Text('Save Experience'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
