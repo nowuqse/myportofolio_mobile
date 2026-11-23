@@ -10,9 +10,9 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP C";
 
   final List<ItemHomepage> items = const [
-    ItemHomepage("Lihat Proyek", Icons.folder, Colors.pinkAccent),
-    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.blueAccent),
-    ItemHomepage("Logout", Icons.logout, Colors.redAccent),
+    ItemHomepage("View Projects", Icons.folder, Colors.pinkAccent),
+    ItemHomepage("Add Project", Icons.add_circle, Colors.blueAccent),
+    ItemHomepage("Add Experience", Icons.work_outline, Colors.teal),
   ];
 
   @override
@@ -34,18 +34,25 @@ class MyHomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfoCard(title: 'NPM', content: npm),
-                  InfoCard(title: 'Name', content: nama),
-                  InfoCard(title: 'Class', content: kelas),
+                  Expanded(
+                    child: InfoCard(title: 'NPM', content: npm),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InfoCard(title: 'Name', content: nama),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InfoCard(title: 'Class', content: kelas),
+                  ),
                 ],
               ),
               const SizedBox(height: 16.0),
               const Padding(
                 padding: EdgeInsets.only(top: 16.0),
                 child: Text(
-                  'Selamat datang di MyPortfolio Mobile!',
+                  'Welcome to MyPortfolio Mobile!',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                 ),
@@ -78,13 +85,12 @@ class InfoCard extends StatelessWidget {
     return Card(
       elevation: 2.0,
       child: Container(
-        width: MediaQuery.of(context).size.width / 3.5,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
-            Text(content),
+            Text(content, textAlign: TextAlign.center),
           ],
         ),
       ),

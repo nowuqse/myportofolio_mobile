@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
@@ -20,8 +21,9 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
   final List<String> _categories = [
     'Web Development',
     'Mobile Development',
-    'Machine Learning',
-    'Data Science',
+    'UI/UX',
+    'Project Management',
+    'Game Development',
     'Other',
   ];
 
@@ -40,12 +42,14 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 1. PROJECT NAME
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  maxLength: 255,
                   decoration: InputDecoration(
-                    hintText: "Nama Proyek",
-                    labelText: "Nama Proyek",
+                    hintText: "Project Name",
+                    labelText: "Project Name",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -57,19 +61,26 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                   },
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "Nama proyek tidak boleh kosong!";
+                      return "Project name cannot be empty!";
                     }
+
+                    if (value.trim().length > 255) {
+                      return "Project name cannot exceed 255 characters!";
+                    }
+
                     return null;
                   },
                 ),
               ),
+
+              // 2. PROJECT DESCRIPTION
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   maxLines: 5,
                   decoration: InputDecoration(
-                    hintText: "Deskripsi Proyek",
-                    labelText: "Deskripsi Proyek",
+                    hintText: "Project Description",
+                    labelText: "Project Description",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -81,17 +92,20 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                   },
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "Deskripsi proyek tidak boleh kosong!";
+                      return "Project description cannot be empty!";
                     }
+
                     return null;
                   },
                 ),
               ),
+
+              // 3. PROJECT CATEGORY
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField<String>(
                   decoration: InputDecoration(
-                    labelText: "Kategori Proyek",
+                    labelText: "Project Category",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -107,18 +121,29 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                       .toList(),
                   onChanged: (newValue) {
                     if (newValue == null) return;
+
                     setState(() {
                       _category = newValue;
                     });
                   },
+                  validator: (value) {
+                    if (value == null ||
+                        !_categories.contains(value)) {
+                      return "Please select a valid project category!";
+                    }
+
+                    return null;
+                  },
                 ),
               ),
+
+              // 4. TECHNOLOGIES USED
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: "Contoh: Flutter, Django, Figma",
-                    labelText: "Teknologi yang Digunakan",
+                    hintText: "Example: Flutter, Django, Figma",
+                    labelText: "Technologies Used",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -130,13 +155,15 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                   },
                 ),
               ),
+
+              // 5. PROJECT LINK
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   keyboardType: TextInputType.url,
                   decoration: InputDecoration(
-                    hintText: "URL Proyek (opsional)",
-                    labelText: "Tautan Proyek",
+                    hintText: "Project URL (optional)",
+                    labelText: "Project Link",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
@@ -146,15 +173,36 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                       _projectLink = value;
                     });
                   },
+                  validator: (value) {
+                    // Project Link bersifat opsional
+                    if (value == null || value.trim().isEmpty) {
+                      return null;
+                    }
+
+                    final uri = Uri.tryParse(value.trim());
+
+                    if (uri == null ||
+                        (uri.scheme != 'http' &&
+                            uri.scheme != 'https') ||
+                        uri.host.isEmpty ||
+                        !uri.host.contains('.')) {
+                      return "Please enter a valid URL (https://example.com)";
+                    }
+
+                    return null;
+                  },
                 ),
               ),
+
+              // SAVE BUTTON
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(Colors.indigo),
+                      backgroundColor:
+                          WidgetStateProperty.all(Colors.indigo),
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -162,16 +210,19 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Proyek berhasil ditambahkan!'),
+                              title: const Text(
+                                'Project added successfully!',
+                              ),
                               content: SingleChildScrollView(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
-                                    Text('Nama Proyek: $_projectName'),
-                                    Text('Deskripsi: $_description'),
-                                    Text('Kategori: $_category'),
-                                    Text('Teknologi: $_technologies'),
-                                    Text('Tautan: $_projectLink'),
+                                    Text('Project Name: $_projectName'),
+                                    Text('Description: $_description'),
+                                    Text('Category: $_category'),
+                                    Text('Technologies: $_technologies'),
+                                    Text('Project Link: $_projectLink'),
                                   ],
                                 ),
                               ),
@@ -180,6 +231,15 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                     _formKey.currentState!.reset();
+
+                                    // Sinkronisasi variabel state
+                                    setState(() {
+                                      _projectName = "";
+                                      _description = "";
+                                      _category = "Web Development";
+                                      _technologies = "";
+                                      _projectLink = "";
+                                    });
                                   },
                                   child: const Text('OK'),
                                 ),
