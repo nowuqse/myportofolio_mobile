@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
+
 class ProjectFormPage extends StatefulWidget {
   const ProjectFormPage({super.key});
 
@@ -108,7 +109,7 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Project Form'),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Color(0xFFEF3D8B),
         foregroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),

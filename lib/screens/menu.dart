@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:myportofolio_mobile/theme/app_theme.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
@@ -10,9 +11,10 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "PBP C";
 
   final List<ItemHomepage> items = const [
-    ItemHomepage("View Projects", Icons.folder, Colors.pinkAccent),
-    ItemHomepage("Add Project", Icons.add_circle, Colors.blueAccent),
-    ItemHomepage("Add Experience", Icons.work_outline, Colors.teal),
+    ItemHomepage("View Projects", Icons.folder, AppTheme.yellowGradient,Color(0xFFD4A017)),
+    ItemHomepage("View Experiences", Icons.work_outline, AppTheme.purpleGradient,Color(0xFF7B1FA2)),
+    ItemHomepage("Add Project", Icons.add_circle, AppTheme.blueGradient,Color(0xFF1E88E5)),
+    ItemHomepage("Add Experience", Icons.add_circle, AppTheme.greenGradient,Color(0xFF689F38)),
   ];
 
   @override
@@ -23,7 +25,7 @@ class MyHomePage extends StatelessWidget {
           'MyPortfolio',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Color(0xFFEF3D8B),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: const LeftDrawer(),
@@ -62,7 +64,7 @@ class MyHomePage extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                crossAxisCount: 3,
+                crossAxisCount: 4,
                 shrinkWrap: true,
                 children: items.map((item) => ItemCard(item)).toList(),
               ),
