@@ -11,15 +11,34 @@ concurrency:
 
 jobs:
   build:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v2
-    with:
-      setup: dart run build_runner build --delete-conflicting-outputs
-      coverage_excludes: "**/*.g.dart"
-      min_coverage: 0
-      timeout_minutes: 15
-      flutter_version: "3.24.0" # <--- NAIKKAN VERSI FLUTTER KE YANG LEBIH BARU
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+          
+      - name: Install dependencies
+        run: flutter pub get
+        
+      - name: Run build_runner
+        run: dart run build_runner build --delete-conflicting-outputs
+        
+      - name: Check Formatting
+        run: dart format --set-exit-if-changed .
+        
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+        
+      - name: Run Tests
+        run: flutter test
 
   build_apk:
+    name: Build APK
     needs: build
     runs-on: ubuntu-latest
     steps:
