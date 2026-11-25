@@ -10,11 +10,32 @@ class MyHomePage extends StatelessWidget {
   final String nama = "Cindy Olivia Chai";
   final String kelas = "PBP C";
 
+  // Hanya 4 item bawaan
   final List<ItemHomepage> items = const [
-    ItemHomepage("View Projects", Icons.folder, AppTheme.yellowGradient,Color(0xFFD4A017)),
-    ItemHomepage("View Experiences", Icons.work_outline, AppTheme.purpleGradient,Color(0xFF7B1FA2)),
-    ItemHomepage("Add Project", Icons.add_circle, AppTheme.blueGradient,Color(0xFF1E88E5)),
-    ItemHomepage("Add Experience", Icons.add_circle, AppTheme.greenGradient,Color(0xFF689F38)),
+    ItemHomepage(
+      "View Projects",
+      Icons.folder,
+      AppTheme.yellowGradient,
+      Color(0xFFD4A017),
+    ),
+    ItemHomepage(
+      "View Experiences",
+      Icons.work_outline,
+      AppTheme.purpleGradient,
+      Color(0xFF7B1FA2),
+    ),
+    ItemHomepage(
+      "Add Project",
+      Icons.add_circle,
+      AppTheme.blueGradient,
+      Color(0xFF1E88E5),
+    ),
+    ItemHomepage(
+      "Add Experience",
+      Icons.add_circle,
+      AppTheme.greenGradient,
+      Color(0xFF689F38),
+    ),
   ];
 
   @override
@@ -25,7 +46,7 @@ class MyHomePage extends StatelessWidget {
           'MyPortfolio',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color(0xFFEF3D8B),
+        backgroundColor: const Color(0xFFEF3D8B),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: const LeftDrawer(),

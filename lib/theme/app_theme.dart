@@ -18,8 +18,10 @@ abstract final class AppTheme {
   static const Color blueEnd = Color(0xFF61D0FF);
 
   // Purple palette (Soft Lavender)
-  static const Color purpleStart = Color(0xFFF3E5F5); // Sangat terang (hampir putih)
-  static const Color purpleEnd = Color(0xFFBA68C8);   // Ungu pastel yang cerah
+  static const Color purpleStart = Color(
+    0xFFF3E5F5,
+  ); // Sangat terang (hampir putih)
+  static const Color purpleEnd = Color(0xFFBA68C8); // Ungu pastel yang cerah
 
   static const LinearGradient pinkGradient = LinearGradient(
     colors: [pinkStart, pinkEnd],

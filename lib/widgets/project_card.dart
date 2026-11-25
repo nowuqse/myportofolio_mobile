@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/screens/project_list_screen.dart'; // Import ini
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
 
 class ItemHomepage {
   final String name;
@@ -13,7 +15,6 @@ class ItemHomepage {
 
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
-
   const ItemCard(this.item, {super.key});
 
   @override
@@ -25,28 +26,39 @@ class ItemCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: item.gradient,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: item.border,
-            width: 1.5,            
-          ),
+          border: Border.all(color: item.border, width: 1.5),
         ),
         child: InkWell(
-          onTap: () {
-            if (item.name == "Add Project") {
+          onTap: () async {
+            if (item.name == "View Projects") {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ProjectFormPage(),
+                  builder: (context) => const ProjectListScreen(),
                 ),
               );
+            } else if (item.name == "Add Project") {
+              final isAuthorized = await ensureLoggedIn(context);
+              if (isAuthorized && context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProjectFormPage(),
+                  ),
+                );
+              }
             } else if (item.name == "Add Experience") {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ExperienceFormPage(),
-                ),
-              );
+              final isAuthorized = await ensureLoggedIn(context);
+              if (isAuthorized && context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ExperienceFormPage(),
+                  ),
+                );
+              }
             }
+            // Note: "View Experiences" belum ada halamannya, jadi belum di-handle
           },
           borderRadius: BorderRadius.circular(12),
           child: Container(
