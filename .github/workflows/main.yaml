@@ -17,10 +17,9 @@ jobs:
       coverage_excludes: "**/*.g.dart"
       min_coverage: 0
       timeout_minutes: 15
-      flutter_analyze_args: "--no-fatal-infos"  # <--- TAMBAHKAN BARIS INI
+      flutter_version: "3.19.0" # <--- KUNCI VERSI FLUTTER DI SINI (BUKAN ANALYZE ARGS)
 
   build_apk:
-    # Mengisi TODO: Pastikan job ini hanya berjalan setelah `build` sukses
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -30,7 +29,6 @@ jobs:
           channel: stable
           cache: true
           
-      # Mengisi TODO: Jalankan persiapan, generate, dan build APK
       - name: Install dependencies
         run: flutter pub get
         
@@ -40,7 +38,6 @@ jobs:
       - name: Build APK
         run: flutter build apk --release --dart-define=API_BASE_URL=${{ vars.API_BASE_URL }}
 
-      # Mengisi TODO: Upload file APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
