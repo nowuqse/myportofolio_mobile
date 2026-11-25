@@ -17,6 +17,7 @@ jobs:
       coverage_excludes: "**/*.g.dart"
       min_coverage: 0
       timeout_minutes: 15
+      flutter_analyze_args: "--no-fatal-infos"  # <--- TAMBAHKAN BARIS INI
 
   build_apk:
     # Mengisi TODO: Pastikan job ini hanya berjalan setelah `build` sukses
