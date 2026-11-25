@@ -17,7 +17,7 @@ jobs:
       coverage_excludes: "**/*.g.dart"
       min_coverage: 0
       timeout_minutes: 15
-      flutter_version: "3.19.0" # <--- KUNCI VERSI FLUTTER DI SINI (BUKAN ANALYZE ARGS)
+      flutter_version: "3.24.0" # <--- NAIKKAN VERSI FLUTTER KE YANG LEBIH BARU
 
   build_apk:
     needs: build
