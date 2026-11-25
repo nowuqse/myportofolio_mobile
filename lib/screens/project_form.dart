@@ -87,14 +87,12 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
       // 7. Tangani error (401 = token expired)
       if (e.statusCode == 401 || e.statusCode == 403) {
         await context.read<AuthState>().logout();
-        
+
         // PERBAIKAN: Menggunakan mounted milik State, bukan context.mounted
-        if (!mounted) return; 
-        
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Session expired. Please login again.'),
-          ),
+          const SnackBar(content: Text('Session expired. Please login again.')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -169,7 +167,7 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownButtonFormField<String>(
-                  initialValue: _category, 
+                  initialValue: _category,
                   decoration: const InputDecoration(
                     labelText: "Category",
                     border: OutlineInputBorder(),
